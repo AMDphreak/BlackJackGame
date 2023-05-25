@@ -1,3 +1,5 @@
+#BlackJack Game
+
 BlackJack Game with simulated dealer. This is a complete working Java command-line game that I created while tutoring someone else in Java for their accelerated bootcamp. The game seems simple by description, but the code is fairly long and complex for such a simple-sounding game.
 
 Some interesting features I added were time-delays to make the game feel like an old-school Gameboy Color game. Gameboy games always have delays in their text printouts to make the games feel more suspenseful and realistic.
