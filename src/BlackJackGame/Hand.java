@@ -39,28 +39,40 @@ public class Hand {
 		return s;
 	}
 
+	public boolean notAllAcesAre1() {
+		boolean elevensExist = false;
+		for (Card card : hand) {
+			elevensExist = elevensExist && (card.value() != 11);
+		}
+		return elevensExist;
+	}
+
 	// Add up the card values!
 	// @return The sum of the cards, counting an Ace as 11 if the total would be under 21, otherwise
 	//   treats the Ace as a 1.
 	public int sum() {
 		int runningTotal = 0; // keep track of total
-		for (Card card : hand) { // enhanced for loop goes through list
-			int cardValue;
-			// check the card for an Ace and decide its value
-			if(card.name() != null) { // if the card doesn't have a name, getName will return null
-				if(card.name() == "Ace") { // Ace
-					cardValue = 11;
-					if (runningTotal + 11 > 21) {
-						cardValue = 1;
+		for (Card card : hand) { // enhanced for-loop looks at each card in hand
+			// add up the card values.
+			runningTotal += card.value();
+
+			// check the stack for Aces that are making the hand bust.
+			// If the hand is busting, set an Ace's value to 1.
+			if (runningTotal > 21 && notAllAcesAre1()) {
+				// go back through, and set the value of an Ace to 1.
+				// this works even if the user has more than one Ace card,
+				// because it will only set a single card then break the
+				// loop. If a user has a hand with 5, Ace, Ace, then Aces get set to 1
+				// one at a time, until the runningTotal is <= 21
+				for (Card card : hand) {
+					if (runningTotal > 21) {
+						if (card.name() == "Ace" && card.value() == 11) {
+							card.setValue(1);
+							runningTotal -= 10;
+						}
 					}
-				} else { // King, Queen, or Jack
-					cardValue = card.value();
 				}
-			} else {
-				cardValue = card.value();
 			}
-			// add the new card's value
-			runningTotal = runningTotal + cardValue;
 		}
 		return runningTotal;
 	}
