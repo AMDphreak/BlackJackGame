@@ -64,10 +64,10 @@ public class Hand {
 				// because it will only set a single card then break the
 				// loop. If a user has a hand with 5, Ace, Ace, then Aces get set to 1
 				// one at a time, until the runningTotal is <= 21
-				for (Card card : hand) {
+				for (Card c : hand) {
 					if (runningTotal > 21) {
-						if (card.name() == "Ace" && card.value() == 11) {
-							card.setValue(1);
+						if (c.name() == "Ace" && c.value() == 11) {
+							c.setValue(1);
 							runningTotal -= 10;
 						}
 					}
