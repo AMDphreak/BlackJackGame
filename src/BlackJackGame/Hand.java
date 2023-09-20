@@ -42,7 +42,7 @@ public class Hand {
 	public boolean notAllAcesAre1() {
 		boolean elevensExist = false;
 		for (Card card : hand) {
-			elevensExist = elevensExist && (card.value() != 11);
+			elevensExist = elevensExist || ( card.value() != 11 );
 		}
 		return elevensExist;
 	}
@@ -66,8 +66,10 @@ public class Hand {
 				// one at a time, until the runningTotal is <= 21
 				for (Card c : hand) {
 					if (runningTotal > 21) {
-						if (c.name() == "Ace" && c.value() == 11) {
+						if (c.value() == 11) {
 							c.setValue(1);
+              System.out.println("c's value was 11 and is now " + c.value());
+              System.out.println("runningTotal was " + runningTotal);
 							runningTotal -= 10;
 						}
 					}
