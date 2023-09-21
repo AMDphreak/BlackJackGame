@@ -19,7 +19,7 @@ public class Deck {
 		//using an enhanced for loop to loop through the array of suits
 		for (String suit : suits) {
 			// Add the Ace
-			deck.add(new Card("Ace", suit));
+			deck.add(new Card("Ace", suit, 11));
 			// Now add the fixed-value cards
 			for (int value=2; value<=13; value++) {
 				switch (value) {
