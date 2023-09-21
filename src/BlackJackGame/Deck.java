@@ -24,11 +24,11 @@ public class Deck {
 			for (int value=2; value<=13; value++) {
 				switch (value) {
 				// Jack
-				case 11: deck.add(new Card("Jack", suit, value)); break;
+				case 11: deck.add(new Card("Jack", suit, 10)); break;
 				// Queen
-				case 12: deck.add(new Card("Queen", suit, value)); break;
+				case 12: deck.add(new Card("Queen", suit, 10)); break;
 				// King
-				case 13: deck.add(new Card("King", suit, value)); break;
+				case 13: deck.add(new Card("King", suit, 10)); break;
 				// Numeric
 				default: deck.add(new Card(Integer.toString(value), suit, value));
 				}
