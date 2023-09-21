@@ -43,7 +43,7 @@ public class BlackJackGameSimulator {
 			c = deck.drawCard(); checkforAce(c, isFirstAce); playerHand.add(c);
 			c = deck.drawCard(); checkforAce(c, isFirstAce); playerHand.add(c);
 
-			printlnDelayed("You were dealt 2 cards: " + playerHand.toString() );
+			printlnDelayed("You were dealt " + playerHand.toString() );
 			// check the cards to see if the player has drawn a perfect 21 and won the round
 			if (playerHand.sum() == 21) {
 				printlnDelayed("Your total is "+playerHand.sum()+".");
@@ -54,9 +54,9 @@ public class BlackJackGameSimulator {
 				c = deck.drawCard(); checkforAce(c, isFirstAce); dealerHand.add(c);
 				c = deck.drawCard(); checkforAce(c, isFirstAce); dealerHand.add(c);
 
-				printlnDelayed("The dealer was dealt 2 cards. His first card is: "
+				printlnDelayed("The dealer was dealt cards. One card is "
 						+ dealerHand.card(0).toString() + ". The other is face down.");
-				printlnDelayed("Your hand totals " + playerHand.sum() + ". Don't exceed 21 or you lose!");
+				printlnDelayed("Your hand's total is " + playerHand.sum() + ". Don't exceed 21 or you lose!");
 
 				/*
 				 *  Now that the dealer's hand has been dealt, the player is given the opportunity
