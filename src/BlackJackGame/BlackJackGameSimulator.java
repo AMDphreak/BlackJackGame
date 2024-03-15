@@ -228,13 +228,21 @@ public class BlackJackGameSimulator {
 		do {
 			System.out.print(">");
 			String line = scan.nextLine();
-			if (line.isEmpty()) {
-				valid = true;
+			if (line.isEmpty() && bet <= money) {
 				printlnDelayed("You have accepted the default value of $"+String.format("%.2f", bet));
+				// If the user has accepted the default bet, then we must make sure they have enough money
+				valid = true;
+			} else if (line.isEmpty() && bet > money) {
+				printlnDelayed("You do not have sufficient money to accept the default bet. Please enter a valid number.");
 			} else {
 				try {
 					double input = Double.parseDouble(line);
-					if (input >= 0 && bet <= money) {
+					/* need to validate the input.
+					   User cannot bet more money than they have, so input must be less than or equal
+					   to money.
+					   
+					*/
+					if (input >= 0 && input <= money) {
 						valid = true;
 						bet = input;
 					} else {
