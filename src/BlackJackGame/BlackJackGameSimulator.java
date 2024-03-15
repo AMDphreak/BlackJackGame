@@ -23,7 +23,7 @@ public class BlackJackGameSimulator {
 			round += 1;
 
 			// take a bet
-			double bet = placeBet(money, scan);
+			double bet = placeBet(money);
 			printDelayed(".",".",".");
 
 			// Set up the game
