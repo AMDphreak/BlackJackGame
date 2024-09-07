@@ -6,7 +6,7 @@ public class BlackJackGameSimulator {
 	public static void main(String[] args) throws InterruptedException {
 		// InterruptedException throw in function declaration is included for Thread.sleep() function.
 
-		double money = 100.00; // 💯 dollars
+		double money = 100.00; // 100 dollars
 		int round = 0; boolean playAgain;
 		boolean isFirstAce = false; // Keeps track of whether an Ace has been drawn this game
 		// so the game can tell the user how the Ace works.

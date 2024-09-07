@@ -15,20 +15,20 @@ public class Deck {
 		// let's put some cards into the deck. Deck has 52 cards.
 		// 13 Hearts, 13 Spades, 13 Clubs, 13 Diamonds
 		// put in non-numeric cards
-		String[] suits = {"Hearts","Spades","Clubs","Diamonds"};
+		String[] suits = {"♥️","♠️","♣️","♦️"};
 		//using an enhanced for loop to loop through the array of suits
 		for (String suit : suits) {
 			// Add the Ace
-			deck.add(new Card("Ace", suit));
+			deck.add(new Card("Ace", suit, 11));
 			// Now add the fixed-value cards
 			for (int value=2; value<=13; value++) {
 				switch (value) {
 				// Jack
-				case 11: deck.add(new Card("Jack", suit, value)); break;
+				case 11: deck.add(new Card("Jack", suit, 10)); break;
 				// Queen
-				case 12: deck.add(new Card("Queen", suit, value)); break;
+				case 12: deck.add(new Card("Queen", suit, 10)); break;
 				// King
-				case 13: deck.add(new Card("King", suit, value)); break;
+				case 13: deck.add(new Card("King", suit, 10)); break;
 				// Numeric
 				default: deck.add(new Card(Integer.toString(value), suit, value));
 				}
