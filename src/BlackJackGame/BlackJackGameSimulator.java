@@ -1,5 +1,7 @@
 package BlackJackGame;
 import java.util.Scanner;
+import java.io.InputStreamReader;
+import java.io.BufferedReader;
 
 public class BlackJackGameSimulator {
 
@@ -22,7 +24,7 @@ public class BlackJackGameSimulator {
 			round += 1;
 
 			// take a bet
-			double bet = placeBet(money, scan);
+			double bet = placeBet(money);
 			printDelayed(".",".",".");
 
 			// Set up the game
@@ -43,7 +45,7 @@ public class BlackJackGameSimulator {
 			c = deck.drawCard(); checkforAce(c, isFirstAce); playerHand.add(c);
 			c = deck.drawCard(); checkforAce(c, isFirstAce); playerHand.add(c);
 
-			printlnDelayed("You were dealt 2 cards: " + playerHand.toString() );
+			printlnDelayed("You were dealt " + playerHand.toString() );
 			// check the cards to see if the player has drawn a perfect 21 and won the round
 			if (playerHand.sum() == 21) {
 				printlnDelayed("Your total is "+playerHand.sum()+".");
@@ -54,9 +56,9 @@ public class BlackJackGameSimulator {
 				c = deck.drawCard(); checkforAce(c, isFirstAce); dealerHand.add(c);
 				c = deck.drawCard(); checkforAce(c, isFirstAce); dealerHand.add(c);
 
-				printlnDelayed("The dealer was dealt 2 cards. His first card is: "
+				printlnDelayed("The dealer was dealt cards. One card is "
 						+ dealerHand.card(0).toString() + ". The other is face down.");
-				printlnDelayed("Your hand totals " + playerHand.sum() + ". Don't exceed 21 or you lose!");
+				printlnDelayed("Your hand's total is " + playerHand.sum() + ". Don't exceed 21 or you lose!");
 
 				/*
 				 *  Now that the dealer's hand has been dealt, the player is given the opportunity
@@ -218,34 +220,43 @@ public class BlackJackGameSimulator {
 		}
 	}
 
-	public static double placeBet(double money, Scanner scan) throws InterruptedException {
-		double bet = 20;
-		printlnDelayed("How much would you like to bet? "
-				+ "You can bet between 0 and $"+String.format("%.2f", money)+".");
-		printlnDelayed("Enter the amount you would like to gamble. Be wise!");
-
-		boolean valid = false; // keep track of whether user has chosen a valid input
-		do {
-			System.out.print(">");
-			String line = scan.nextLine();
-			if (line.isEmpty()) {
-				valid = true;
-				printlnDelayed("You have accepted the default value of $"+String.format("%.2f", bet));
-			} else {
-				try {
-					double input = Double.parseDouble(line);
-					if (input >= 0 && bet <= money) {
-						valid = true;
-						bet = input;
-					} else {
-						printlnDelayed("Not a valid amount of money. Please input a number.");
-					}
-				} catch (Exception e) {
-					printlnDelayed("Please input a valid number or hit Enter to accept the default.");
-				}
-			}
-		} while(valid == false);
-
-		return bet;
+	public static double placeBet(double money) throws InterruptedException {
+	    BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+	    double bet = 20;
+	
+	    printlnDelayed("How much would you like to bet? "
+	            + "You can bet between 0 and $" + String.format("%.2f", money) + ".");
+	    printlnDelayed("Enter the amount you would like to gamble. Be wise!");
+	
+	    boolean valid = false; // keep track of whether user has chosen a valid input
+	    do {
+	        System.out.print(">");
+	        try {
+	            String line = reader.readLine();
+	            if (line.isEmpty() && bet <= money) {
+	                printlnDelayed("You have accepted the default value of $" + String.format("%.2f", bet));
+	                // If the user has accepted the default bet, then we must make sure they have enough money
+	                valid = true;
+	            } else if (line.isEmpty() && bet > money) {
+	                printlnDelayed("You do not have sufficient money to accept the default bet. Please enter a valid number.");
+	            } else {
+	                double input = Double.parseDouble(line);
+	                /* need to validate the input.
+	                   User cannot bet more money than they have, so input must be less than or equal
+	                   to money.
+	                */
+	                if (input >= 0 && input <= money) {
+	                    valid = true;
+	                    bet = input;
+	                } else {
+	                    printlnDelayed("Not a valid amount of money. Please input a number.");
+	                }
+	            }
+	        } catch (Exception e) {
+	            printlnDelayed("Please input a valid number or hit Enter to accept the default.");
+	        }
+	    } while (!valid);
+	
+	    return bet;
 	}
 }
