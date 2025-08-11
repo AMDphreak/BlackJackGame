@@ -1,0 +1,21 @@
+name: Java BlackJack Game
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  run-game:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Compile the game
+        run: javac -d bin --module-path bin --add-modules BlackJackGame src/BlackJackGame/*.java src/module-info.java
+      - name: Run the game
+        run: java --module-path bin -m BlackJackGame/BlackJackGame.BlackJackGameSimulator
