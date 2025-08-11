@@ -12,3 +12,33 @@ Cards have values corresponding to their card number, and the following rules ap
 
 The game also gives the non-dealer player an amount of money at the start to place his bets, and if he wins a round, he wins back his bet + that same amount.
 
+
+
+## How to Run
+
+To compile and run this BlackJack game, follow these steps:
+
+1. **Navigate to the project root:** Open your terminal or command prompt and change your directory to the `BlackJackGame` folder:
+
+   ```sh
+   cd z:/code/amdphreak/BlackJackGame
+   ```
+
+2. **Compile the Java source files:**
+
+   ```sh
+   javac -d bin src/BlackJackGame/*.java src/module-info.java
+   ```
+
+3. **Run the game:**
+
+   ```sh
+   java -p bin -m BlackJackGame/BlackJackGame.BlackJackGameSimulator
+   ```
+
+## Bug Fixes
+
+This update includes the following bug fixes:
+
+* **Ace Value Calculation:** Corrected an issue in `Hand.java` where the game was not correctly re-valuing Ace cards from 11 to 1 when a player's hand exceeded 21. This fix ensures proper game logic and allows tie conditions to be correctly recognized.
+* **String Comparison:** Updated string comparison for "Ace" in `BlackJackGameSimulator.java` from `==` to `.equals()` for improved code robustness and adherence to Java best practices.
