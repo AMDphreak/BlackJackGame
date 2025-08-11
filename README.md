@@ -38,6 +38,8 @@ To compile and run this BlackJack game, follow these steps:
 
 ## Bug Fixes
 
+### 2025/08/10
+
 This update includes the following bug fixes:
 
 * **Ace Value Calculation:** Corrected an issue in `Hand.java` where the game was not correctly re-valuing Ace cards from 11 to 1 when a player's hand exceeded 21. This fix ensures proper game logic and allows tie conditions to be correctly recognized.
