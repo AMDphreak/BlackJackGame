@@ -42,7 +42,7 @@ public class Hand {
 	public boolean notAllAcesAre1() {
 		boolean elevensExist = false;
 		for (Card card : hand) {
-			elevensExist = elevensExist || ( card.value() != 11 );
+			elevensExist = elevensExist || ( card.value() == 11 );
 		}
 		return elevensExist;
 	}

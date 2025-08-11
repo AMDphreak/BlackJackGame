@@ -214,7 +214,7 @@ public class BlackJackGameSimulator {
 	}
 
 	public static void checkforAce(Card c, boolean firstAce) throws InterruptedException {
-		if(c.name()=="Ace" && firstAce) {
+		if(c.name().equals("Ace") && firstAce) {
 			printlnDelayed("An Ace can be valued either 1 or 11, "
 					+ "depending on whether an 11 will cause the hand to exceed 21.");
 		}
