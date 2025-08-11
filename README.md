@@ -17,30 +17,66 @@ The game also gives the non-dealer player an amount of money at the start to pla
 To run this game locally:
 
 1. Clone the repository: `git clone [repository_url]`
-2. **Navigate to the project directory:** Open your terminal or command prompt and change your directory to the `BlackJackGame` folder:
+2. Install the Java SDK: Eclipse Adoptium (open source, general purpose): <https://adoptium.net/temurin/releases/>. Be sure to include the JDK's path in your PATH variable.
+3. **Navigate to the project directory:** Open your terminal or command prompt and change your directory to the `BlackJackGame` folder:
 
    ```sh
    # example
    cd z:/code/amdphreak/BlackJackGame
    ```
 
-3. **Compile the Java source files:**
+4. **Compile the Java source files:**
 
    ```sh
    javac -d bin src/BlackJackGame/*.java src/module-info.java
    ```
 
-4. **Run the game:**
+5. **Run the game:**
 
    ```sh
    java --module-path bin -m BlackJackGame/BlackJackGame.BlackJackGameSimulator
    ```
 
-## Bug Fixes
+## Changelog
 
-### 2025/08/10
+### 2025/08/11
 
-This update includes the following bug fixes:
+**Bug Fixes:**
 
-* **Ace Value Calculation:** Corrected an issue in `Hand.java` where the game was not correctly re-valuing Ace cards from 11 to 1 when a player's hand exceeded 21. This fix ensures proper game logic and allows tie conditions to be correctly recognized.
-* **String Comparison:** Updated string comparison for "Ace" in `BlackJackGameSimulator.java` from `==` to `.equals()` for improved code robustness and adherence to Java best practices.
+- **Ace Value Calculation:** Corrected an issue in `Hand.java` where the game was not correctly re-valuing Ace cards from 11 to 1 when a player's hand exceeded 21. This fix ensures proper game logic and allows tie conditions to be correctly recognized.
+- **String Comparison:** Updated string comparison for "Ace" in `BlackJackGameSimulator.java` from `==` to `.equals()` for improved code robustness and adherence to Java best practices.
+- **IOException Handling:** Added `import java.io.IOException;` and updated the `main` and `placeBet` method signatures in `BlackJackGameSimulator.java` to `throws InterruptedException, IOException` to correctly handle potential `IOException`s during input operations.
+
+**Improvements:**
+
+- **Improved Command-Line Dialogues:** Updated various prompts and messages throughout the game to be more clear and friendly for first-time Blackjack players, including explanations of game rules, betting instructions, and player actions ("Hit" or "Stay").
+
+**Refactoring:**
+
+The project has undergone significant refactoring to improve its structure, maintainability, and extensibility. Key changes include:
+
+- **Modular Design:** The monolithic `BlackJackGameSimulator` class has been broken down into several smaller, more focused classes, each with a single responsibility.
+- **New Classes Introduced:**
+  - `BlackJackGame`: Manages the overall game flow, rounds, and state.
+  - `Player`: Encapsulates player-specific logic (hand, money, actions).
+  - `Dealer`: Encapsulates dealer-specific logic (hand, drawing rules).
+  - `GameUI`: Handles all command-line input and output, centralizing UI interactions.
+  - `BettingSystem`: Manages all betting logic and money transactions.
+- **Improved Separation of Concerns:** Game logic, player/dealer actions, UI, and betting are now distinct, making the codebase easier to understand, debug, and modify.
+- **Reduced Coupling:** Components are less dependent on each other, allowing for changes in one area without widespread impact.
+
+```mermaid
+graph TD
+    A[BlackJackGameSimulator - Main Entry] --> B(BlackJackGame - Game Orchestrator)
+
+    B --> C{Player}
+    B --> D{Dealer}
+    B --> E[Deck]
+    B --> F[GameUI - Input/Output]
+    B --> G[BettingSystem]
+
+    C --> H[Hand]
+    D --> H
+    E --> I[Card]
+    H --> I
+```
