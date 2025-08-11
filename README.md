@@ -12,28 +12,28 @@ Cards have values corresponding to their card number, and the following rules ap
 
 The game also gives the non-dealer player an amount of money at the start to place his bets, and if he wins a round, he wins back his bet + that same amount.
 
-
-
 ## How to Run
 
-To compile and run this BlackJack game, follow these steps:
+To run this game locally:
 
-1. **Navigate to the project root:** Open your terminal or command prompt and change your directory to the `BlackJackGame` folder:
+1. Clone the repository: `git clone [repository_url]`
+2. **Navigate to the project directory:** Open your terminal or command prompt and change your directory to the `BlackJackGame` folder:
 
    ```sh
+   # example
    cd z:/code/amdphreak/BlackJackGame
    ```
 
-2. **Compile the Java source files:**
+3. **Compile the Java source files:**
 
    ```sh
    javac -d bin src/BlackJackGame/*.java src/module-info.java
    ```
 
-3. **Run the game:**
+4. **Run the game:**
 
    ```sh
-   java -p bin -m BlackJackGame/BlackJackGame.BlackJackGameSimulator
+   java --module-path bin -m BlackJackGame/BlackJackGame.BlackJackGameSimulator
    ```
 
 ## Bug Fixes
