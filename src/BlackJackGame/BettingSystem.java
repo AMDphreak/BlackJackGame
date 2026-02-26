@@ -14,15 +14,15 @@ public class BettingSystem {
         return ui.getBet(money);
     }
 
-    public void playerWins(double bet) throws InterruptedException {
-        ui.printlnDelayed("Congratulations! You won $" + String.format("%.2f", bet) + "!");
+    public void playerWins(double bet, int round) throws InterruptedException {
+        ui.printlnDelayed("Round " + round + " complete. Congratulations! You won " + GameUI.ANSI_GREEN + "$" + String.format("%.2f", bet) + GameUI.ANSI_RESET + "!");
     }
 
-    public void dealerWins(double bet) throws InterruptedException {
-        ui.printlnDelayed("The dealer wins this round. You lose $" + String.format("%.2f", bet) + ". Better luck next time!");
+    public void dealerWins(double bet, int round) throws InterruptedException {
+        ui.printlnDelayed("Round " + round + " complete. The dealer wins this round. You lose " + GameUI.ANSI_RED + "$" + String.format("%.2f", bet) + GameUI.ANSI_RESET + ". Better luck next time!");
     }
 
-    public void displayTie() throws InterruptedException {
-        ui.printlnDelayed("It's a tie! Your bet is returned.");
+    public void displayTie(int round) throws InterruptedException {
+        ui.printlnDelayed("Round " + round + " complete. It's a tie! Your bet is returned.");
     }
 }

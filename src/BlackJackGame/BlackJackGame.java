@@ -18,8 +18,9 @@ public class BlackJackGame {
     }
 
     public void startGame() throws InterruptedException, IOException {
-        ui.printlnDelayed("Welcome to Black Jack! Your goal is to get a hand total closer to 21 than the dealer, without going over 21.");
-        ui.printlnDelayed("You start with $" + String.format("%.2f", player.getMoney()) + " of gambling money.");
+        ui.printlnDelayed(GameUI.ANSI_PURPLE + GameUI.ANSI_BOLD + "Welcome to Black Jack!" + GameUI.ANSI_RESET);
+        ui.printlnDelayed("You will be dealt 2 cards at the start.");
+        ui.printlnDelayed("Get a hand total as close to 21 as possible without going over, while making sure you are higher than the dealer's hand.");
 
         int round = 0;
         boolean playAgain;
@@ -27,110 +28,115 @@ public class BlackJackGame {
         do {
             round += 1;
             double bet = bettingSystem.placeBet(player.getMoney());
-            ui.printDelayed(".", ".", ".");
 
-            ui.printlnDelayed("Creating a new deck.");
             deck = new Deck();
             player.clearHand();
             dealer.clearHand();
-
-            ui.printDelayed(".", ".", ".");
-            int times = (int)(100 + Math.random() * 900);
-            deck.shuffle(times);
-            ui.printlnDelayed("The deck was shuffled " + times + " times, one card at a time.");
+            int shuffles = (int) (100 + Math.random() * 900);
+            ui.printlnDelayed("Shuffling deck " + shuffles + " times, one card at a time...");
+            deck.shuffle(shuffles);
 
             // Player's initial draw
             Card c;
-            c = deck.drawCard(); ui.displayAceInfo(); player.getHand().add(c);
-            c = deck.drawCard(); ui.displayAceInfo(); player.getHand().add(c);
+            c = deck.drawCard();
+            player.getHand().add(c);
+            c = deck.drawCard();
+            player.getHand().add(c);
+            // Check both initial cards for Ace
+            if (player.getHand().card(0).name().equals("Ace") || player.getHand().card(1).name().equals("Ace")) {
+                ui.displayAceInfo();
+            }
 
             ui.displayPlayerHand(player.getHand());
+            // Check for player Blackjack immediately after initial deal
             if (player.getHand().sum() == 21) {
-                ui.printlnDelayed("Your total is " + player.getHand().sum() + ".");
-                bettingSystem.playerWins(bet);
+                ui.printlnDelayed("You have Blackjack!");
+                bettingSystem.playerWins(bet, round);
                 player.addMoney(bet);
             } else {
                 // Dealer's initial draw
-                c = deck.drawCard(); ui.displayAceInfo(); dealer.getHand().add(c);
-                c = deck.drawCard(); ui.displayAceInfo(); dealer.getHand().add(c);
+                c = deck.drawCard();
+                dealer.getHand().add(c);
+                c = deck.drawCard();
+                dealer.getHand().add(c);
+                if (dealer.getHand().card(0).name().equals("Ace")) { // Only display if the visible card is an Ace
+                    ui.displayAceInfo();
+                }
 
                 ui.displayDealerInitialHand(dealer.getHand());
-                ui.displayPlayerTotal(player.getHand().sum());
 
                 // Player's turn to draw cards
                 boolean keepDrawing = true;
                 do {
-                    ui.printlnDelayed("Your total is now " + player.getHand().sum() + ".");
                     String playerAction = ui.getPlayerAction();
 
-                    if (playerAction.equals("yes") || playerAction.isEmpty()) {
+                    if (playerAction.equals("hit")) {
                         c = deck.drawCard();
                         player.getHand().add(c);
-                        ui.printlnDelayed("You drew " + c.toString() + ". Your total is " + player.getHand().sum() + ".");
-                        ui.displayAceInfo();
-                    } else if (playerAction.equals("no")) {
+                        String drawMessage = "You drew " + ui.formatCard(c) + ".";
+                        if (player.getHand().sum() > 21) {
+                            ui.printlnDelayed(drawMessage); // Print draw message without total
+                            ui.printlnDelayed("Your total is " + ui.formatTotal(player.getHand().sum()) + ". You busted!");
+                        } else {
+                            ui.printlnDelayed(drawMessage + " Your total is " + ui.formatTotal(player.getHand().sum()) + ".");
+                        }
+                    } else if (playerAction.equals("stay")) {
                         keepDrawing = false;
                     }
 
                     if (player.getHand().sum() > 21) {
-                        ui.displayPlayerBust(player.getHand().sum());
-                        bettingSystem.dealerWins(bet);
+                        bettingSystem.dealerWins(bet, round);
                         player.subtractMoney(bet);
                         keepDrawing = false;
                     }
                 } while (keepDrawing);
 
+                // Only proceed to dealer's turn if player hasn't busted
                 if (player.getHand().sum() <= 21) {
                     // Dealer's turn
                     ui.displayDealerTurnStart();
                     ui.displayDealerHand(dealer.getHand());
 
+                    // Check for dealer Blackjack immediately after revealing hand
                     if (dealer.getHand().sum() == 21) {
-                        bettingSystem.dealerWins(bet);
+                        ui.printlnDelayed("Dealer has Blackjack!");
+                        bettingSystem.dealerWins(bet, round);
                         player.subtractMoney(bet);
-                    } else if (dealer.shouldHit()) {
-                        ui.printDelayed(".", ".", ".");
-                        do {
-                            Thread.sleep(1000);
-                            c = deck.drawCard();
-                            ui.displayAceInfo();
-                            dealer.getHand().add(c);
-                            ui.displayDealerDrawsCard(c, dealer.getHand().sum());
-                            if (!dealer.shouldHit()) {
-                                ui.displayDealerStopsDrawing();
-                            }
-                            if (dealer.getHand().sum() > 21) {
-                                ui.displayDealerBust();
-                                bettingSystem.playerWins(bet);
-                                player.addMoney(bet);
-                            }
-                        } while (dealer.shouldHit() && dealer.getHand().sum() <= 21);
-
-                        // Compare hands
-                        if (dealer.getHand().sum() > player.getHand().sum() && dealer.getHand().sum() <= 21) {
-                            ui.displayDealerWins();
-                            bettingSystem.dealerWins(bet);
-                            player.subtractMoney(bet);
-                        } else if (dealer.getHand().sum() < player.getHand().sum() || dealer.getHand().sum() > 21) {
-                            ui.displayPlayerWins();
-                            bettingSystem.playerWins(bet);
-                            player.addMoney(bet);
-                        } else if (dealer.getHand().sum() == player.getHand().sum() && dealer.getHand().sum() <= 21) {
-                            bettingSystem.displayTie();
-                        }
                     } else {
-                        ui.displayDealerStopsDrawing();
-                        // Compare hands if dealer didn't hit
-                        if (dealer.getHand().sum() > player.getHand().sum() && dealer.getHand().sum() <= 21) {
-                            ui.displayDealerWins();
-                            bettingSystem.dealerWins(bet);
-                            player.subtractMoney(bet);
-                        } else if (dealer.getHand().sum() < player.getHand().sum() || dealer.getHand().sum() > 21) {
-                            ui.displayPlayerWins();
-                            bettingSystem.playerWins(bet);
-                            player.addMoney(bet);
-                        } else if (dealer.getHand().sum() == player.getHand().sum() && dealer.getHand().sum() <= 21) {
-                            bettingSystem.displayTie();
+                        // Dealer draws cards until 17 or higher
+                        if (dealer.shouldHit()) {
+                            ui.printDelayed(".", ".", ".");
+                            do {
+                                Thread.sleep(1000);
+                                c = deck.drawCard();
+                                dealer.getHand().add(c);
+                                ui.displayDealerDrawsCard(c, dealer.getHand().sum());
+                                if (!dealer.shouldHit()) {
+                                    ui.displayDealerStopsDrawing();
+                                }
+                                if (dealer.getHand().sum() > 21) {
+                                    ui.displayDealerBust();
+                                    bettingSystem.playerWins(bet, round);
+                                    player.addMoney(bet);
+                                }
+                            } while (dealer.shouldHit() && dealer.getHand().sum() <= 21);
+                        } else {
+                            ui.displayDealerStopsDrawing();
+                        }
+
+                        // Compare hands only if dealer hasn't busted
+                        if (dealer.getHand().sum() <= 21) {
+                            if (dealer.getHand().sum() > player.getHand().sum()) {
+                                ui.displayDealerWins();
+                                bettingSystem.dealerWins(bet, round);
+                                player.subtractMoney(bet);
+                            } else if (dealer.getHand().sum() < player.getHand().sum()) {
+                                ui.displayPlayerWins();
+                                bettingSystem.playerWins(bet, round);
+                                player.addMoney(bet);
+                            } else { // Tie
+                                bettingSystem.displayTie(round);
+                            }
                         }
                     }
                 }

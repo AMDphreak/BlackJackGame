@@ -22,7 +22,7 @@ public class Hand {
 		return hand.size();
 	}
 	
-	// print all of the cards in a comma-separated list. returns a string. does not actually
+	// prints all of the cards in a comma-separated list. returns a string. does not actually
 	// print anything.
 	public String toString() {
 		String s = ""; // Fill this string up with our card name and suit as we iterate through
@@ -58,20 +58,15 @@ public class Hand {
 
 			// check the stack for Aces that are making the hand bust.
 			// If the hand is busting, set an Ace's value to 1.
-			if (runningTotal > 21 && notAllAcesAre1()) {
-				// go back through, and set the value of an Ace to 1.
-				// this works even if the user has more than one Ace card,
-				// because it will only set a single card then break the
-				// loop. If a user has a hand with 5, Ace, Ace, then Aces get set to 1
-				// one at a time, until the runningTotal is <= 21
+			// If the hand is busting and there are Aces that can be valued as 11,
+			// change one Ace's value to 1 and re-calculate the total.
+			// This loop continues until the hand is no longer busting or all Aces are valued as 1.
+			while (runningTotal > 21 && notAllAcesAre1()) {
 				for (Card c : hand) {
-					if (runningTotal > 21) {
-						if (c.value() == 11) {
-							c.setValue(1);
-              System.out.println("c's value was 11 and is now " + c.value());
-              System.out.println("runningTotal was " + runningTotal);
-							runningTotal -= 10;
-						}
+					if (c.value() == 11) { // Find an Ace currently valued at 11
+						c.setValue(1); // Change its value to 1
+						runningTotal -= 10; // Subtract 10 from the total (11 - 1 = 10)
+						break; // Break after adjusting one Ace, then re-evaluate the total
 					}
 				}
 			}

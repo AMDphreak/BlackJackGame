@@ -15,7 +15,7 @@ public class Deck {
 		// let's put some cards into the deck. Deck has 52 cards.
 		// 13 Hearts, 13 Spades, 13 Clubs, 13 Diamonds
 		// put in non-numeric cards
-		String[] suits = {"♥️","♠️","♣️","♦️"};
+		String[] suits = {"Hearts","Spades","Clubs","Diamonds"};
 		//using an enhanced for loop to loop through the array of suits
 		for (String suit : suits) {
 			// Add the Ace
